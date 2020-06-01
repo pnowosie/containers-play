@@ -1,5 +1,7 @@
 from flask import Flask, Response
 from cow_say import cowsay
+import http.client as HTTP
+import requests
 
 
 def create_app():
@@ -20,8 +22,15 @@ def create_app():
 
         :return: Flask response
         """
+        resp = requests.get(app.config['BACKEND_URL']+'/api')
+
+        text = 'Sorry ;( Could get to the backend'
+        if resp.status_code == HTTP.OK:
+            data = resp.json()
+            text = "{}\n  -  {}".format(data['quote'], data['author'])
+
         return Response(
-            cowsay.cow('Beatiful Flask development'),
+            cowsay.cow(text),
             status=200, 
             mimetype='text/plain'
         )

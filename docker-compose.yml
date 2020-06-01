@@ -5,6 +5,7 @@ services:
     environment:
       - PYTHONUNBUFFERED='true'
       - PYTHONDONTWRITEBYTECODE=1
+      - BACKEND_URL=http://backend:8001/
     build:
       dockerfile: ./frontend/Dockerfile
       context: .
@@ -17,3 +18,20 @@ services:
       - './frontend:/app'
     ports:
       - '8000:8000'
+
+  backend:
+    environment:
+      - PYTHONUNBUFFERED='true'
+      - PYTHONDONTWRITEBYTECODE=1
+    build:
+      dockerfile: ./backend/Dockerfile
+      context: .
+    command: >
+      gunicorn -b 0.0.0.0:8001
+        --access-logfile -
+        --reload
+        "cow_say.app:create_app()"
+    volumes:
+      - './backend:/app'
+    ports:
+      - '8001:8001'
