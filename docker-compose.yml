@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  frontend:
+    environment:
+      - PYTHONUNBUFFERED='true'
+      - PYTHONDONTWRITEBYTECODE=1
+    build:
+      dockerfile: ./frontend/Dockerfile
+      context: .
+    command: >
+      gunicorn -b 0.0.0.0:8000
+        --access-logfile -
+        --reload
+        "cow_say.app:create_app()"
+    volumes:
+      - './frontend:/app'
+    ports:
+      - '8000:8000'
