@@ -27,7 +27,9 @@ def create_app():
         text = 'Sorry ;( Could get to the backend'
         if resp.status_code == HTTP.OK:
             data = resp.json()
-            text = "{}\n  -  {}".format(data['quote'], data['author'])
+            text = data['quote']
+            if data['author']:
+                text += "\n  -  {}".format(data['author']) 
 
         return Response(
             cowsay.cow(text),

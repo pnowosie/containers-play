@@ -1,4 +1,6 @@
-FROM python:3.7.5-slim-buster
+FROM python:3.8.3-alpine3.10
+
+RUN apk add python3-dev build-base gcc linux-headers postgresql-dev libffi-dev
 
 ENV INSTALL_PATH /app
 RUN mkdir -p $INSTALL_PATH

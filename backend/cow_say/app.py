@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
-
+from cow_say.models import Quote
+from cow_say.extensions import db
 
 def create_app():
     """
@@ -12,6 +13,8 @@ def create_app():
     app.config.from_object('config.settings')
     app.config.from_pyfile('settings.py', silent=True)
 
+    db.init_app(app)
+
     @app.route('/api')
     def index():
         """
@@ -19,9 +22,13 @@ def create_app():
 
         :return: Flask response
         """
+        import random
+
+        quotes = random.sample(Quote.query.all(), k=1)
+
         return jsonify({
-            "author": 'Yoda', 
-            "quote": 'Do or do not. There is no try.'
+            "author": quotes[0].author,
+            "quote": quotes[0].quote
         })
 
 
